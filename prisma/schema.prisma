@@ -110,3 +110,23 @@ model Review {
   @@index([productId])
   @@map("reviews")
 }
+model Order {
+  id     Int         @id @default(autoincrement())
+  status OrderStatus @default(PENDING)
+  quantity Int
+
+  userId    Int
+  productId Int
+
+  user    User    @relation(fields: [userId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  isDeleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([productId])
+  @@map("orders")
+}
