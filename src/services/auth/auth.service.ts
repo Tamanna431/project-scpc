@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { prisma } from "../../lib/prisma";
 
 interface RegisterInput {
@@ -37,4 +38,62 @@ export const registerUser = async (payload: RegisterInput) => {
   const { password: _, ...userWithoutPassword } = user;
 
   return userWithoutPassword;
+};
+
+interface LoginInput {
+  email: string;
+  password: string;
+}
+
+export const loginUser = async (payload: LoginInput) => {
+  const { email, password } = payload;
+
+  // 1. Find user
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (!user) {
+    throw new Error("Invalid email or password");
+  }
+
+  // 2. Check password
+  const isPasswordMatched = await bcrypt.compare(
+    password,
+    user.password
+  );
+
+  if (!isPasswordMatched) {
+    throw new Error("Invalid email or password");
+  }
+
+  // 3. JWT secret
+  const jwtSecret = process.env.JWT_SECRET;
+
+  if (!jwtSecret) {
+    throw new Error("JWT_SECRET is not configured");
+  }
+
+  // 4. Create token
+  const token = jwt.sign(
+    {
+      userId: user.id,
+      email: user.email,
+      role: user.role,
+    },
+    jwtSecret,
+    {
+      expiresIn: "7d",
+    }
+  );
+
+  // 5. Don't send password
+  const { password: _, ...userWithoutPassword } = user;
+
+  return {
+    user: userWithoutPassword,
+    token,
+  };
 };

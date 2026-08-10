@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { prisma } from "./lib/prisma";
+import authRoutes from "./routes/auth.route";
 
 const app = express();
 
@@ -14,23 +15,6 @@ app.get("/", (req, res) => {
   });
 });
 
-app.get("/test-db", async (req, res) => {
-  try {
-    const users = await prisma.user.findMany();
-
-    res.json({
-      success: true,
-      message: "Database is working",
-      data: users,
-    });
-  } catch (error) {
-    console.error(error);
-
-    res.status(500).json({
-      success: false,
-      message: "Database query failed",
-    });
-  }
-});
+app.use("/api/auth", authRoutes);
 
 export default app;

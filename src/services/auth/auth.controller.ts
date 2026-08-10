@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { registerUser } from "./auth.service";
+import {
+  registerUser,
+  loginUser,
+} from "./auth.service";
+
 
 export const register = async (
   req: Request,
@@ -20,6 +24,31 @@ export const register = async (
         : "Something went wrong";
 
     res.status(400).json({
+      success: false,
+      message,
+      data: null,
+    });
+  }
+};
+export const login = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const result = await loginUser(req.body);
+
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      data: result,
+    });
+  } catch (error) {
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Something went wrong";
+
+    res.status(401).json({
       success: false,
       message,
       data: null,
