@@ -2,6 +2,10 @@ import express from "express";
 import cors from "cors";
 import { prisma } from "./lib/prisma";
 import authRoutes from "./routes/auth.route";
+import {
+  authMiddleware,
+  AuthRequest,
+} from "./middleware/auth.middleware";
 
 const app = express();
 
@@ -16,5 +20,18 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.get(
+  "/api/protected",
+  authMiddleware,
+  (req: AuthRequest, res) => {
+    res.json({
+      success: true,
+      message: "You can access this protected route",
+      data: {
+        user: req.user,
+      },
+    });
+  }
+);
 
 export default app;
