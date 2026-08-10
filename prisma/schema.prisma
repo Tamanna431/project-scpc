@@ -64,3 +64,29 @@ model Category {
   @@index([name])
   @@map("categories")
 }
+model Product {
+  id          Int           @id @default(autoincrement())
+  name        String
+  description String?
+  price       Float
+  stock       Int           @default(0)
+  status      ProductStatus @default(ACTIVE)
+
+  isDeleted Boolean @default(false)
+
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  reviews Review[]
+  orders  Order[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([userId])
+  @@map("products")
+}
