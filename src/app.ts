@@ -8,6 +8,8 @@ import {
   AuthRequest,
 } from "./middleware/auth.middleware";
 import categoryRoutes from "./services/category/category.route";
+import reviewRoutes from "./services/review/review.route";
+import orderRoutes from "./services/order/order.route";
 
 const app = express();
 
@@ -15,6 +17,9 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/categories", categoryRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/orders", orderRoutes);
+
 
 app.get("/", (req, res) => {
   res.json({
