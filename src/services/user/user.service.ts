@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { prisma } from "../../lib/prisma";
-import { Role } from "../../../generated/prisma/enums";
+import { Role } from "@prisma/client";
 
 interface CreateUserInput {
   name: string;
