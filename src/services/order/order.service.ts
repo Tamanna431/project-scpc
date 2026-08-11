@@ -20,12 +20,9 @@ export const createOrder = async (data: {
     throw new Error("Insufficient stock");
   }
 
-  const total = product.price * data.quantity;
-
   const order = await prisma.order.create({
     data: {
       quantity: data.quantity,
-      total,
       userId: data.userId,
       productId: data.productId,
     },

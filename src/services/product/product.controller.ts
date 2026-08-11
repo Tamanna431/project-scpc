@@ -6,14 +6,24 @@ import {
   updateProduct,
   deleteProduct,
 } from "./product.service";
+import { AuthRequest } from "../../middleware/auth.middleware";
 
-export const create = async (req: Request, res: Response) => {
+export const create = async (req: AuthRequest, res: Response) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+        data: null,
+      });
+    }
+
     const product = await createProduct({
       ...req.body,
       price: Number(req.body.price),
       stock: Number(req.body.stock),
       categoryId: Number(req.body.categoryId),
+      userId: Number(req.user.userId),
     });
 
     res.status(201).json({

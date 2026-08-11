@@ -123,9 +123,6 @@ export const update = async (
       ...(req.body.comment !== undefined && {
         comment: req.body.comment,
       }),
-      ...(req.body.status !== undefined && {
-        status: req.body.status,
-      }),
     });
 
     res.status(200).json({

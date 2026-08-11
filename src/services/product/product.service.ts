@@ -6,6 +6,7 @@ export const createProduct = async (data: {
   price: number;
   stock: number;
   categoryId: number;
+  userId: number;
 }) => {
   return prisma.product.create({
     data,

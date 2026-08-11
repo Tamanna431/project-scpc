@@ -84,7 +84,6 @@ export const updateReview = async (
   data: {
     rating?: number;
     comment?: string;
-    status?: "PENDING" | "APPROVED" | "REJECTED";
   }
 ) => {
   const review = await prisma.review.findFirst({

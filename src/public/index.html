@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SCIC API Documentation & Console</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+  <!-- Layout Container -->
+  <div class="app-container">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <span class="logo-icon">⚡</span>
+          <h2>SCIC Console</h2>
+        </div>
+        <p class="subtitle">v1.0.0 (Express + TypeScript)</p>
+      </div>
+
+      <!-- Search Input -->
+      <div class="search-box">
+        <input type="text" id="endpoint-search" placeholder="Search endpoints...">
+      </div>
+      
+      <!-- Module Navigation -->
+      <nav class="nav-menu">
+        <div class="nav-section">
+          <h3>Authentication</h3>
+          <ul id="nav-auth"></ul>
+        </div>
+        <div class="nav-section">
+          <h3>Core Modules</h3>
+          <ul id="nav-users"></ul>
+          <ul id="nav-categories"></ul>
+          <ul id="nav-products"></ul>
+        </div>
+        <div class="nav-section">
+          <h3>Activity</h3>
+          <ul id="nav-orders"></ul>
+          <ul id="nav-reviews"></ul>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Settings Bar -->
+      <header class="top-bar">
+        <div class="setting-group">
+          <label for="server-url">Server Base URL</label>
+          <input type="text" id="server-url" value="" placeholder="http://localhost:5000">
+        </div>
+        <div class="setting-group token-group">
+          <label for="auth-token">Bearer Token (JWT)</label>
+          <div class="input-with-button">
+            <input type="text" id="auth-token" placeholder="Paste your JWT here for authorized routes">
+            <button id="clear-token" title="Clear token">✕</button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Welcome / Overview Screen -->
+      <section id="welcome-view" class="content-panel active">
+        <div class="hero-section">
+          <h1>SCIC API Dashboard</h1>
+          <p>Welcome to the production-ready REST API console. This is an interactive portal designed to view documentation and perform live REST requests against the backend server.</p>
+        </div>
+
+        <div class="quick-start">
+          <h2>Quick Start Checklist</h2>
+          <div class="checklist-grid">
+            <div class="card">
+              <h3>1. Register & Login</h3>
+              <p>Go to the <strong>Authentication</strong> section. Register a user and run the login endpoint to fetch a JWT token.</p>
+            </div>
+            <div class="card">
+              <h3>2. Set Token</h3>
+              <p>Copy the returned token and paste it into the <strong>Bearer Token (JWT)</strong> field in the top bar. This will authorize all subsequent requests.</p>
+            </div>
+            <div class="card">
+              <h3>3. Explore CRUD</h3>
+              <p>Explore Users, Categories, Products, Reviews, and Orders. You can run Create, Read, Update, and Soft Delete actions directly.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tech-spec">
+          <h2>Technical Stack Specifications</h2>
+          <table class="spec-table">
+            <tr>
+              <td><strong>Backend Engine</strong></td>
+              <td>Express.js (TypeScript)</td>
+            </tr>
+            <tr>
+              <td><strong>Database Layer</strong></td>
+              <td>PostgreSQL + Prisma ORM</td>
+            </tr>
+            <tr>
+              <td><strong>Authentication</strong></td>
+              <td>JWT (jsonwebtoken) & Hashed passwords (bcrypt)</td>
+            </tr>
+            <tr>
+              <td><strong>Relational Models</strong></td>
+              <td>User, Category, Product, Review, Order</td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- Endpoint View (Populated dynamically) -->
+      <section id="endpoint-view" class="content-panel">
+        <div class="endpoint-header">
+          <div class="endpoint-title-row">
+            <span class="method-badge" id="view-method">GET</span>
+            <h2 id="view-title">Endpoint Title</h2>
+          </div>
+          <p class="endpoint-path"><span id="view-full-url">http://localhost:5000/api/...</span></p>
+          <p class="endpoint-desc" id="view-desc">Endpoint description goes here.</p>
+        </div>
+
+        <!-- Split Grid: Docs Left, Try-It-Out Right -->
+        <div class="split-grid">
+          
+          <!-- Documentation Side -->
+          <div class="docs-column">
+            
+            <!-- Headers Card -->
+            <div class="card docs-card" id="card-headers">
+              <h3>Headers</h3>
+              <div class="table-container">
+                <table class="info-table" id="table-headers">
+                  <!-- Dynamically populated -->
+                </table>
+              </div>
+            </div>
+
+            <!-- Path Params Card -->
+            <div class="card docs-card" id="card-params">
+              <h3>Path Parameters</h3>
+              <div class="table-container">
+                <table class="info-table" id="table-params">
+                  <!-- Dynamically populated -->
+                </table>
+              </div>
+            </div>
+
+            <!-- Request Body Schema Card -->
+            <div class="card docs-card" id="card-body-schema">
+              <h3>Request Body Schema</h3>
+              <pre><code class="language-json" id="code-body-schema">{}</code></pre>
+            </div>
+
+            <!-- Expected Response Schema Card -->
+            <div class="card docs-card">
+              <h3>Expected Success Response</h3>
+              <pre><code class="language-json" id="code-response-schema">{}</code></pre>
+            </div>
+
+          </div>
+
+          <!-- Interactive Playground Side -->
+          <div class="playground-column">
+            <div class="card playground-card">
+              <div class="card-header">
+                <h3>Try It Out</h3>
+                <span class="pulse-indicator">Console Playground</span>
+              </div>
+
+              <!-- Parameter Inputs -->
+              <div class="playground-section" id="params-input-section">
+                <h4>Path Parameters</h4>
+                <div class="inputs-grid" id="params-inputs-container">
+                  <!-- Param inputs generated dynamically -->
+                </div>
+              </div>
+
+              <!-- Body Input -->
+              <div class="playground-section" id="body-input-section">
+                <h4>Request Body (JSON)</h4>
+                <textarea id="body-editor" spellcheck="false" placeholder="Enter JSON request body..."></textarea>
+                <div class="editor-status" id="body-editor-status">JSON is Valid</div>
+              </div>
+
+              <!-- Send Action -->
+              <button id="btn-send-request" class="btn btn-primary">Send Request 🚀</button>
+
+              <!-- Live Response Console -->
+              <div class="playground-section console-response">
+                <div class="console-header">
+                  <h4>Response Console</h4>
+                  <span class="status-badge" id="response-status">---</span>
+                </div>
+                <div class="console-body">
+                  <pre><code class="language-json" id="response-output">// Send a request to see the live API response output here...</code></pre>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
+</body>
+</html>
